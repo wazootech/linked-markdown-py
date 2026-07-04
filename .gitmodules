@@ -1,0 +1,3 @@
+[submodule "test/linked-markdown-spec"]
+	path = test/linked-markdown-spec
+	url = https://github.com/wazootech/linked-markdown.git
