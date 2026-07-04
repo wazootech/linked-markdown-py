@@ -1,0 +1,30 @@
+[project]
+name = "linked-markdown"
+version = "0.1.0"
+description = "Python implementation of Linked Markdown"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [
+  { name = "Wazoo Technology" }
+]
+dependencies = [
+  "pydantic>=2.11.0",
+  "pyyaml>=6.0.0",
+  "rdflib>=7.1.0"
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.4.0"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/linked_markdown"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
