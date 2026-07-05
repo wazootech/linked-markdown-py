@@ -11,7 +11,6 @@ class ParseOptions:
 
 def parse(content: str, options: Optional[ParseOptions] = None) -> dict[str, Any]:
     result = extract(content)
-    parsed: dict[str, Any] = dict(result.attrs)
     if options is not None and options.body_predicate is not None:
-        parsed[options.body_predicate] = result.body
-    return parsed
+        result.attrs[options.body_predicate] = result.body
+    return result.attrs
