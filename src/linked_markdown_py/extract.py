@@ -17,12 +17,14 @@ class ExtractResult(Generic[T]):
 
 
 _FRONT_MATTER_RE = re.compile(
-    r"^---(\w*)\n(.*?)\n---",
+    r"^---(\w*)\n(.*?)(?:\n?)---",
     re.DOTALL | re.MULTILINE,
 )
 
 
 def extract(content: str) -> ExtractResult[dict[str, Any]]:
+    content = content.lstrip("\ufeff").replace("\r\n", "\n")
+
     match = _FRONT_MATTER_RE.match(content)
     if not match:
         raise ValueError("No valid front matter found")
