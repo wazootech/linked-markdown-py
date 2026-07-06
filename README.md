@@ -6,6 +6,8 @@
 
 Python implementation of Linked Markdown, packaged for PyPI.
 
+See the [wazootech/linked-markdown](https://github.com/wazootech/linked-markdown) repository for the specification, conformance suite, and reference documentation.
+
 **Status:** All 26 conformance tests passing.
 
 ## API
