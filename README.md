@@ -7,8 +7,8 @@ Python implementation of Linked Markdown, packaged for PyPI.
 ## API
 
 ```python
-from linked_markdown_py.extract import extract
-from linked_markdown_py.errors import (
+from linked_markdown.extract import extract
+from linked_markdown.errors import (
     LinkedMarkdownError,
     LMD_NO_FRONTMATTER,
     LMD_INVALID_FRONTMATTER,
