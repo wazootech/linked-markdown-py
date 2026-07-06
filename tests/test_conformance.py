@@ -2,9 +2,9 @@ import json
 from pathlib import Path
 
 import pytest
+from linked_markdown.errors import LinkedMarkdownError
 
-from linked_markdown_py.errors import LinkedMarkdownError
-from linked_markdown_py.extract import extract
+from linked_markdown.extract import extract
 
 
 def _find_conformance_root() -> Path:

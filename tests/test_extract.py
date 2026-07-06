@@ -1,7 +1,7 @@
 import pytest
+from linked_markdown.errors import LinkedMarkdownError, LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER
 
-from linked_markdown_py.errors import LinkedMarkdownError, LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER
-from linked_markdown_py.extract import extract
+from linked_markdown.extract import extract
 
 
 def test_extract_yaml():
