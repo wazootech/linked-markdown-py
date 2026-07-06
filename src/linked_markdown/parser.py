@@ -21,7 +21,9 @@ def extract(content: str) -> dict[str, Any]:
 
     has_opener = bool(re.match(r"^(---|\+\+\+(?:\n|$)|= \w+ =(?:\n|$))", content))
     if not has_opener:
-        raise LinkedMarkdownError("LMD_NO_FRONTMATTER", "Expected frontmatter at the start of the document.")
+        raise LinkedMarkdownError(
+            "LMD_NO_FRONTMATTER", "Expected frontmatter at the start of the document."
+        )
 
     patterns: list[tuple[str, str, str]] = [
         (r"^---yaml\n", r"\n---", "yaml"),
@@ -40,21 +42,27 @@ def extract(content: str) -> dict[str, Any]:
             remaining = content[opener_len:]
             end_match = re.search(closer_pat, remaining)
             if end_match is None:
-                raise LinkedMarkdownError("LMD_INVALID_FRONTMATTER", "Expected closing frontmatter delimiter.")
-            raw_fm = remaining[:end_match.start()]
-            body = remaining[end_match.end():].lstrip("\n")
+                raise LinkedMarkdownError(
+                    "LMD_INVALID_FRONTMATTER", "Expected closing frontmatter delimiter."
+                )
+            raw_fm = remaining[: end_match.start()]
+            body = remaining[end_match.end() :].lstrip("\n")
             return _build_extract_result(raw_fm, body, fmt)
 
     if content.startswith("---\n"):
         end = content.find("\n---", 3)
         if end == -1:
-            raise LinkedMarkdownError("LMD_INVALID_FRONTMATTER", "Expected closing frontmatter delimiter.")
+            raise LinkedMarkdownError(
+                "LMD_INVALID_FRONTMATTER", "Expected closing frontmatter delimiter."
+            )
         raw_fm = content[4:end]
-        body = content[end + 4:].lstrip("\n")
+        body = content[end + 4 :].lstrip("\n")
         fmt = "json" if raw_fm.strip().startswith(("{", "[")) else "yaml"
         return _build_extract_result(raw_fm, body, fmt)
 
-    raise LinkedMarkdownError("LMD_INVALID_FRONTMATTER", "Unrecognized frontmatter delimiter pattern.")
+    raise LinkedMarkdownError(
+        "LMD_INVALID_FRONTMATTER", "Unrecognized frontmatter delimiter pattern."
+    )
 
 
 def _check_unknown_markers(content: str) -> None:
@@ -62,13 +70,17 @@ def _check_unknown_markers(content: str) -> None:
     if marker_match:
         marker = marker_match.group(1).lower()
         if marker and marker not in VALID_MARKERS:
-            raise LinkedMarkdownError("LMD_INVALID_FRONTMATTER", f"Unknown front matter marker: ---{marker}")
+            raise LinkedMarkdownError(
+                "LMD_INVALID_FRONTMATTER", f"Unknown front matter marker: ---{marker}"
+            )
 
     equals_match = re.match(r"^= (\w+) =", content)
     if equals_match:
         marker = equals_match.group(1).lower()
         if marker not in VALID_MARKERS:
-            raise LinkedMarkdownError("LMD_INVALID_FRONTMATTER", f"Unknown front matter marker: = {marker} =")
+            raise LinkedMarkdownError(
+                "LMD_INVALID_FRONTMATTER", f"Unknown front matter marker: = {marker} ="
+            )
 
 
 def _build_extract_result(raw_fm: str, body: str, fmt: str) -> dict[str, Any]:
@@ -80,7 +92,9 @@ def _build_extract_result(raw_fm: str, body: str, fmt: str) -> dict[str, Any]:
         else:
             attrs = yaml.safe_load(raw_fm) if raw_fm.strip() else {}
     except (json.JSONDecodeError, tomllib.TOMLDecodeError, yaml.YAMLError) as e:
-        raise LinkedMarkdownError("LMD_INVALID_FRONTMATTER", f"Invalid {fmt} frontmatter: {e}") from e
+        raise LinkedMarkdownError(
+            "LMD_INVALID_FRONTMATTER", f"Invalid {fmt} frontmatter: {e}"
+        ) from e
 
     if attrs is None:
         attrs = {}

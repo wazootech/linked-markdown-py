@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-import pytest
 import rdflib
 from rdflib import RDF, Literal, URIRef
 
