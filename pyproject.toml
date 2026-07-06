@@ -14,7 +14,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-  "pytest>=8.4.0"
+  "pytest>=8.4.0",
+  "rdflib>=7.0.0"
 ]
 
 [build-system]
