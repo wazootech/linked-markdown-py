@@ -5,10 +5,10 @@ Python implementation of Linked Markdown, packaged for PyPI.
 ## API
 
 ```python
-from linked_markdown import parse, to_graph
+from linked_markdown import extract
 
-doc = parse(markdown)
-graph = to_graph(doc)
+result = extract(markdown)
+# => {"attrs": {...}, "frontMatter": "...", "body": "..."}
 ```
 
 ## Development

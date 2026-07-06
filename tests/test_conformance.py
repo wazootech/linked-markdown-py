@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from linked_markdown import LmdError, extract
+from linked_markdown import LinkedMarkdownError, extract
 
 CONFORMANCE_ROOT = Path(__file__).parent.parent / "test" / "linked-markdown-spec" / "conformance"
 MANIFEST = json.loads((CONFORMANCE_ROOT / "manifest.json").read_text())
@@ -16,7 +16,7 @@ def test_conformance(case: dict) -> None:
     expect = case.get("expect", {})
 
     if "error" in expect:
-        with pytest.raises(LmdError) as error:
+        with pytest.raises(LinkedMarkdownError) as error:
             extract(input_text)
         assert error.value.code == expect["error"]["code"]
         return
