@@ -2,8 +2,8 @@ import json
 from pathlib import Path
 
 import pytest
-from linked_markdown.errors import LinkedMarkdownError
 
+from linked_markdown.errors import LinkedMarkdownError
 from linked_markdown.extract import extract
 
 

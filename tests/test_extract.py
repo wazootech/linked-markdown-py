@@ -1,6 +1,6 @@
 import pytest
-from linked_markdown.errors import LinkedMarkdownError, LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER
 
+from linked_markdown.errors import LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER, LinkedMarkdownError
 from linked_markdown.extract import extract
 
 

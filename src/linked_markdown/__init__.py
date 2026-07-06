@@ -1,4 +1,4 @@
-from .errors import LinkedMarkdownError, LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER
+from .errors import LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER, LinkedMarkdownError
 from .extract import ExtractResult, extract
 
 __all__ = [
