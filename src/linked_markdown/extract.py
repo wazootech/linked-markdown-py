@@ -6,7 +6,7 @@ from typing import Any, Generic, TypeVar
 
 import yaml
 
-from .errors import LinkedMarkdownError, LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER
+from .errors import LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER, LinkedMarkdownError
 
 T = TypeVar("T")
 
@@ -22,8 +22,8 @@ class ExtractResult(Generic[T]):
 _OPENER_RE = re.compile(
     r"^(?:"
     r"= yaml =|= json =|= toml =|"  # equals delimiters
-    r"---yaml|---json|---toml|"     # explicit markers
-    r"---|\+\+\+"                    # unmarked dash and plus
+    r"---yaml|---json|---toml|"  # explicit markers
+    r"---|\+\+\+"  # unmarked dash and plus
     r")",
     re.MULTILINE,
 )
@@ -82,7 +82,7 @@ def _split_front_matter(
             return format_, raw, body.lstrip("\n")
         return None
 
-    raw = rest[:closer_idx + 1].lstrip("\n")
+    raw = rest[: closer_idx + 1].lstrip("\n")
     body = rest[closer_idx + len(closer) + 1 :]
     return format_, raw, body.lstrip("\n")
 
