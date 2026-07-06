@@ -1,9 +1,10 @@
+from .errors import LinkedMarkdownError, LMD_INVALID_FRONTMATTER, LMD_NO_FRONTMATTER
 from .extract import ExtractResult, extract
-from .parse import ParseOptions, parse
 
 __all__ = [
     "extract",
     "ExtractResult",
-    "parse",
-    "ParseOptions",
+    "LinkedMarkdownError",
+    "LMD_NO_FRONTMATTER",
+    "LMD_INVALID_FRONTMATTER",
 ]

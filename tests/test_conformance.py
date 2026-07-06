@@ -3,34 +3,81 @@ from pathlib import Path
 
 import pytest
 
-from linked_markdown_py.parse import parse
+from linked_markdown_py.errors import LinkedMarkdownError
+from linked_markdown_py.extract import extract
 
 
-def _find_conformance_root():
-    root = Path(__file__).parent / "test" / "linked-markdown-spec" / "conformance"
-    if root.exists():
-        return root
-    alt = Path(__file__).parent.parent / "test" / "linked-markdown-spec" / "conformance"
-    if alt.exists():
-        return alt
-    raise RuntimeError("Cannot find conformance fixtures; run 'git submodule update --init --recursive'")
+def _find_conformance_root() -> Path:
+    # Try multiple locations to find the submodule
+    candidates = [
+        Path(__file__).parent / "linked-markdown-spec" / "conformance",
+        Path(__file__).parent.parent / "test" / "linked-markdown-spec" / "conformance",
+    ]
+    for candidate in candidates:
+        if (candidate / "manifest.json").exists():
+            return candidate
+    raise RuntimeError(
+        "Cannot find conformance fixtures; run 'git submodule update --init --recursive'"
+    )
 
 
 def conformance_cases():
     root = _find_conformance_root()
     manifest = json.loads((root / "manifest.json").read_text())
     for case in manifest["cases"]:
-        parsed_path = case.get("expect", {}).get("parsed")
-        if not parsed_path:
-            continue
+        expect = case.get("expect", {})
         input_path = root / case["input"]
-        expected_path = root / parsed_path
-        yield pytest.param(input_path, expected_path, id=case["id"])
+
+        # Error cases
+        if "error" in expect:
+            yield pytest.param(
+                input_path,
+                None,
+                None,
+                expect["error"].get("code"),
+                id=f"{case['id']} (error)",
+            )
+            continue
+
+        # Parsed cases
+        parsed_path = expect.get("parsed")
+        extracted_path = expect.get("extracted")
+        if parsed_path:
+            yield pytest.param(
+                input_path,
+                root / parsed_path,
+                root / extracted_path if extracted_path else None,
+                None,
+                id=case["id"],
+            )
 
 
-@pytest.mark.parametrize(["input_path", "expected_path"], conformance_cases())
-def test_conformance(input_path: Path, expected_path: Path):
+@pytest.mark.parametrize(
+    ["input_path", "expected_parsed_path", "expected_extracted_path", "expected_error_code"],
+    list(conformance_cases()),
+)
+def test_conformance(
+    input_path: Path,
+    expected_parsed_path: Path | None,
+    expected_extracted_path: Path | None,
+    expected_error_code: str | None,
+):
     raw = input_path.read_text(encoding="utf-8")
-    result = parse(raw)
-    expected = json.loads(expected_path.read_text(encoding="utf-8"))
-    assert result == expected
+
+    if expected_error_code:
+        with pytest.raises(LinkedMarkdownError) as exc_info:
+            extract(raw)
+        assert exc_info.value.code == expected_error_code
+        return
+
+    result = extract(raw)
+
+    if expected_parsed_path:
+        expected_parsed = json.loads(expected_parsed_path.read_text(encoding="utf-8"))
+        assert result.attrs == expected_parsed
+
+    if expected_extracted_path:
+        expected_extracted = json.loads(expected_extracted_path.read_text(encoding="utf-8"))
+        assert result.front_matter == expected_extracted["frontMatter"]
+        assert result.body == expected_extracted["body"]
+        assert result.attrs == expected_extracted["attrs"]
