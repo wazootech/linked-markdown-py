@@ -43,6 +43,19 @@ except LinkedMarkdownError as e:
         ...
 ```
 
+### RDF Compatibility
+
+The `attrs` returned by `extract()` is valid JSON-LD, directly loadable into RDFLib:
+
+```python
+import json
+import rdflib
+
+result = extract(markdown)
+g = rdflib.Graph()
+g.parse(data=json.dumps(result.attrs), format="json-ld")
+```
+
 ## Development
 
 ```sh
