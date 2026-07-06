@@ -1,5 +1,9 @@
 # Linked Markdown Python
 
+[![PyPI version](https://badge.fury.io/py/linked-markdown.svg)](https://pypi.org/project/linked-markdown/)
+[![CI](https://github.com/wazootech/linked-markdown-py/actions/workflows/ci.yml/badge.svg)](https://github.com/wazootech/linked-markdown-py/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Python implementation of Linked Markdown, packaged for PyPI.
 
 **Status:** All 26 conformance tests passing.
