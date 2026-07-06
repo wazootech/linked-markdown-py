@@ -1,6 +1,12 @@
 # Linked Markdown Python
 
+[![PyPI version](https://badge.fury.io/py/linked-markdown.svg)](https://pypi.org/project/linked-markdown/)
+[![CI](https://github.com/wazootech/linked-markdown-py/actions/workflows/ci.yml/badge.svg)](https://github.com/wazootech/linked-markdown-py/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Python implementation of Linked Markdown, packaged for PyPI.
+
+**Status:** All 26 conformance tests passing.
 
 ## API
 
@@ -8,14 +14,39 @@ Python implementation of Linked Markdown, packaged for PyPI.
 from linked_markdown import extract
 
 result = extract(markdown)
-# => {"attrs": {...}, "frontMatter": "...", "body": "..."}
+# => ExtractResult(front_matter="...", body="...", attrs={...})
+```
+
+### `extract(content: str) -> ExtractResult[dict]`
+
+Parses frontmatter from a Linked Markdown document. Supports YAML (`---`, `---yaml`, `= yaml =`), JSON (`---`, `---json`, `= json =`), and TOML (`---toml`, `+++`, `= toml =`) formats.
+
+- Strips UTF-8 BOM and normalizes CRLF to LF before parsing.
+- Returns `front_matter` with a trailing newline for non-empty frontmatter.
+- `front_matter` is `""` for empty frontmatter (`---\n---`).
+- `body` has leading newlines stripped.
+
+### `LinkedMarkdownError`
+
+Thrown for all error conditions. Has a `.code` property:
+
+| Code | When |
+|------|------|
+| `LMD_NO_FRONTMATTER` | No frontmatter delimiters found |
+| `LMD_INVALID_FRONTMATTER` | Unknown marker, unparseable content, non-object attrs, or no closing delimiter |
+
+```python
+try:
+    extract(markdown)
+except LinkedMarkdownError as e:
+    if e.code == LMD_NO_FRONTMATTER:
+        ...
 ```
 
 ## Development
 
 ```sh
 git submodule update --init --recursive
+uv sync
 uv run pytest
 ```
-
-The conformance suite is consumed from the `wazootech/linked-markdown` spec repository as a git submodule.

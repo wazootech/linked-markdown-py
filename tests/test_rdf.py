@@ -19,7 +19,7 @@ def test_valid_yaml_marker_loads_into_rdflib():
     result = extract(input_text)
 
     g = rdflib.Graph()
-    g.parse(data=json.dumps(result["attrs"]), format="json-ld")
+    g.parse(data=json.dumps(result.attrs), format="json-ld")
 
     subject = URIRef("https://example.org/docs/fixture")
     assert (subject, RDF.type, SCHEMA.Article) in g
@@ -31,7 +31,7 @@ def test_missing_id_generates_blank_node():
     result = extract(input_text)
 
     g = rdflib.Graph()
-    g.parse(data=json.dumps(result["attrs"]), format="json-ld")
+    g.parse(data=json.dumps(result.attrs), format="json-ld")
 
     subjects = {s for s, _, _ in g}
     assert any(isinstance(s, rdflib.BNode) for s in subjects)
@@ -42,7 +42,7 @@ def test_missing_type_produces_no_rdf_type():
     result = extract(input_text)
 
     g = rdflib.Graph()
-    g.parse(data=json.dumps(result["attrs"]), format="json-ld")
+    g.parse(data=json.dumps(result.attrs), format="json-ld")
 
     assert len(list(g.triples((None, RDF.type, None)))) == 0
 
@@ -52,7 +52,7 @@ def test_bare_keywords_produces_no_triples_without_context():
     result = extract(input_text)
 
     g = rdflib.Graph()
-    g.parse(data=json.dumps(result["attrs"]), format="json-ld")
+    g.parse(data=json.dumps(result.attrs), format="json-ld")
 
     assert len(g) == 0
 
@@ -62,7 +62,7 @@ def test_canonical_type():
     result = extract(input_text)
 
     g = rdflib.Graph()
-    g.parse(data=json.dumps(result["attrs"]), format="json-ld")
+    g.parse(data=json.dumps(result.attrs), format="json-ld")
 
     subject = URIRef("https://example.org/docs/canonical-type")
     assert (subject, RDF.type, SCHEMA.Note) in g
