@@ -1,5 +1,5 @@
 [project]
-name = "linked-markdown-py"
+name = "linked-markdown"
 version = "0.1.0"
 description = "Linked Markdown reference implementation for Python"
 readme = "README.md"
