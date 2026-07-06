@@ -11,6 +11,11 @@ dependencies = [
     "pyyaml>=6.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/wazootech/linked-markdown"
+Source = "https://github.com/wazootech/linked-markdown-py"
+Tracker = "https://github.com/wazootech/linked-markdown-py/issues"
+
 [dependency-groups]
 dev = [
     "pytest>=8.0",
